@@ -1,17 +1,30 @@
 import { Router } from "express";
-import { buildPDF } from "../lib/pdfkit.js";
+import { buildPDF } from "../lib/invoice_pdf.js";
 
 const router = Router();
 
 router.get("/invoice", (req, res) => {
-  // Obtener datos del cliente y productos de la URL
-  const cliente = {
-    nombre: req.query.clienteNombre || "Cliente no especificado",
-    direccion: req.query.clienteDireccion || "Dirección no especificada",
-    telefono: req.query.clienteTelefono || "Teléfono no especificado",
+  const user = {
+    name: req.query.name || "Cliente no especificado",
+    address: req.query.address || "Dirección no especificada",
+    phone: req.query.phone || "Teléfono no especificado",
   };
 
-  const productos = JSON.parse(req.query.productos || "[]");
+  // Parsear el objeto quotation de la URI
+  const quotationData = JSON.parse(req.query.quotation || "{}");
+
+  const quotation = {
+    id: quotationData.id || "",
+    name: quotationData.name || "",
+    description: quotationData.description || "",
+    idService: quotationData.idService || [],
+    materials: quotationData.materials || [],
+    length: quotationData.length || "",
+    status: quotationData.status || "",
+    total: quotationData.total || "",
+    width: quotationData.width || "",
+    userId: quotationData.userId || "",
+  };
 
   const stream = res.writeHead(200, {
     "Content-Type": "application/pdf",
@@ -19,11 +32,26 @@ router.get("/invoice", (req, res) => {
   });
 
   buildPDF(
-    cliente,
-    productos,
+    user,
+    quotation,
     (data) => stream.write(data),
     () => stream.end()
   );
 });
 
 export default router;
+
+/*
+  const quotation = {
+    id: quotationData.id || "",
+    name: quotationData.name || "",
+    description: quotationData.description || "",
+    idService: quotationData.idService || [],
+    length: quotationData.length || "",
+    status: quotationData.status || "",
+      materials: quotationData.materials || [],
+    total: quotationData.total || "",
+    width: quotationData.width || "",
+    userId: quotationData.userId || "",
+  };
+*/
