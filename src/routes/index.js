@@ -10,7 +10,6 @@ router.get("/invoice", (req, res) => {
     phone: req.query.phone || "Teléfono no especificado",
   };
 
-  // Parsear el objeto quotation de la URI
   const quotationData = JSON.parse(req.query.quotation || "{}");
 
   const quotation = {
@@ -28,7 +27,7 @@ router.get("/invoice", (req, res) => {
 
   const stream = res.writeHead(200, {
     "Content-Type": "application/pdf",
-    "Content-Disposition": "inline; filename=invoice.pdf",
+    "Content-Disposition": "attachment; filename=invoice.pdf",
   });
 
   buildPDF(
