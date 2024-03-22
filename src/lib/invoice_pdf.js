@@ -146,13 +146,6 @@ export function buildPDF(
   dataCallback,
   endCallback
 ) {
-export function buildPDF(
-  user,
-  quotation,
-  methodOfPayment,
-  dataCallback,
-  endCallback
-) {
   const doc = new PDFDocument();
   const fecha = new Date().toLocaleDateString();
 
@@ -177,8 +170,6 @@ export function buildPDF(
   addSummary(
     doc,
     totalSubtotal,
-    quotation.materials.length + quotation.idService.length,
-    methodOfPayment
     quotation.materials.length + quotation.idService.length,
     methodOfPayment
   );
