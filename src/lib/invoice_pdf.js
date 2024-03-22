@@ -62,7 +62,60 @@ function addServiceTable(doc, services, startIndex) {
   return subtotal;
 }
 
-function addSummary(doc, subtotal, servicesLength) {
+function addPaymentMethods(doc, methodOfPayment, servicesLength) {
+  doc
+    .fillColor("black")
+    .fontSize(12)
+    .text("Métodos de Pago", 80, 220 + 30 * (servicesLength + 1) + 245);
+
+  const paymentMethods = ["Nequi", "Bancolombia", "Daviplata"];
+  const paymentAmounts = [
+    methodOfPayment.nequi,
+    methodOfPayment.bancolombia,
+    methodOfPayment.daviplata,
+  ];
+
+  let currentX = 80;
+  const startY = 220 + 30 * (servicesLength + 1) + 265;
+  const imageWidth = 70;
+  const imageHeight = 70;
+  const textY = 220 + 30 * (servicesLength + 1) + 265;
+
+  paymentMethods.forEach((method, index) => {
+    doc.image(`src/lib/images/${method.toUpperCase()}.jpeg`, currentX, startY, {
+      fit: [imageWidth, imageHeight],
+      align: "left",
+    });
+
+    doc
+      .fillColor("black")
+      .fontSize(12)
+      .text(method + ":", currentX + 70, textY);
+    if (method !== "Bancolombia") {
+      doc
+        .fillColor("black")
+        .fontSize(10)
+        .text(paymentAmounts[index], currentX + 70, textY + 15);
+    }
+
+    if (
+      method === "Bancolombia" &&
+      typeof methodOfPayment.bancolombia === "object"
+    ) {
+      const bancolombiaData = methodOfPayment.bancolombia;
+      doc
+        .fontSize(10)
+        .text(`Cuenta ${bancolombiaData.account}`, currentX + 70, textY + 15)
+        .text(`${bancolombiaData.number}`, currentX + 70, textY + 28)
+        .text(`${bancolombiaData.name}`, currentX + 70, textY + 38)
+        .text(`${bancolombiaData.cc}`, currentX + 70, textY + 48);
+    }
+
+    currentX += 160;
+  });
+}
+
+function addSummary(doc, subtotal, servicesLength, methodOfPayment) {
   const iva = subtotal * 0.15;
   const total = subtotal + iva;
 
@@ -82,9 +135,17 @@ function addSummary(doc, subtotal, servicesLength) {
     .fillColor("#4F6DF5")
     .fontSize(12)
     .text(Math.round(total), 480, 220 + 30 * (servicesLength + 1) + 60);
+
+  addPaymentMethods(doc, methodOfPayment, servicesLength);
 }
 
-export function buildPDF(user, quotation, dataCallback, endCallback) {
+export function buildPDF(
+  user,
+  quotation,
+  methodOfPayment,
+  dataCallback,
+  endCallback
+) {
   const doc = new PDFDocument();
   const fecha = new Date().toLocaleDateString();
 
@@ -109,7 +170,8 @@ export function buildPDF(user, quotation, dataCallback, endCallback) {
   addSummary(
     doc,
     totalSubtotal,
-    quotation.materials.length + quotation.idService.length
+    quotation.materials.length + quotation.idService.length,
+    methodOfPayment
   );
 
   doc.end();
