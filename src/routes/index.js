@@ -11,6 +11,7 @@ router.get("/invoice", (req, res) => {
   };
 
   const quotationData = JSON.parse(req.query.quotation || "{}");
+  const methodOfPaymentData = JSON.parse(req.query.methodOfPayment || "{}");
 
   const quotation = {
     id: quotationData.id || "",
@@ -25,14 +26,30 @@ router.get("/invoice", (req, res) => {
     userId: quotationData.userId || "",
   };
 
+  let methodOfPayment;
+  if (methodOfPaymentData.bancolombia) {
+    methodOfPayment = {
+      nequi: methodOfPaymentData.nequi || "",
+      daviplata: methodOfPaymentData.daviplata || "",
+      bancolombia: methodOfPaymentData.bancolombia,
+    };
+  } else {
+    methodOfPayment = {
+      nequi: methodOfPaymentData.nequi || "",
+      daviplata: methodOfPaymentData.daviplata || "",
+      bancolombia: "",
+    };
+  }
   const stream = res.writeHead(200, {
     "Content-Type": "application/pdf",
-    "Content-Disposition": "attachment; filename=invoice.pdf",
+    "Content-Disposition": "inline; filename=invoice.pdf",
   });
+  //    "Content-Disposition": "attachment; filename=invoice.pdf",
 
   buildPDF(
     user,
     quotation,
+    methodOfPayment,
     (data) => stream.write(data),
     () => stream.end()
   );
