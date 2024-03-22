@@ -68,7 +68,7 @@ function addPaymentMethods(doc, methodOfPayment, servicesLength) {
     .fontSize(12)
     .text("Métodos de Pago", 80, 220 + 30 * (servicesLength + 1) + 245);
 
-  const paymentMethods = ["Nequi", "Bancolombia", "Daviplata"];
+  const paymentMethods = ["nequi", "bancolombia", "daviplata"];
   const paymentAmounts = [
     methodOfPayment.nequi,
     methodOfPayment.bancolombia,
