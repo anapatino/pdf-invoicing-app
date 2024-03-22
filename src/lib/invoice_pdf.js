@@ -82,7 +82,7 @@ function addPaymentMethods(doc, methodOfPayment, servicesLength) {
   const textY = 220 + 30 * (servicesLength + 1) + 265;
 
   paymentMethods.forEach((method, index) => {
-    doc.image(`src/lib/images/${method.toUpperCase()}.jpeg`, currentX, startY, {
+    doc.image(`src/lib/images/${method}.jpeg`, currentX, startY, {
       fit: [imageWidth, imageHeight],
       align: "left",
     });
