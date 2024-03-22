@@ -3,15 +3,15 @@ import { buildPDF } from "../lib/invoice_pdf.js";
 
 const router = Router();
 
-router.get("/invoice", (req, res) => {
+router.post("/invoice", (req, res) => {
   const user = {
-    name: req.query.name || "Cliente no especificado",
-    address: req.query.address || "Dirección no especificada",
-    phone: req.query.phone || "Teléfono no especificado",
+    name: req.body.name || "Cliente no especificado",
+    address: req.body.address || "Dirección no especificada",
+    phone: req.body.phone || "Teléfono no especificado",
   };
 
-  const quotationData = JSON.parse(req.query.quotation || "{}");
-  const methodOfPaymentData = JSON.parse(req.query.methodOfPayment || "{}");
+  const quotationData = req.body.quotation || {};
+  const methodOfPaymentData = req.body.methodOfPayment || {};
 
   const quotation = {
     id: quotationData.id || "",
@@ -40,6 +40,7 @@ router.get("/invoice", (req, res) => {
       bancolombia: "",
     };
   }
+
   const stream = res.writeHead(200, {
     "Content-Type": "application/pdf",
     "Content-Disposition": "attachment; filename=invoice.pdf",

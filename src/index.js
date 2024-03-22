@@ -1,10 +1,13 @@
 import express from "express";
+import bodyParser from "body-parser";
 import index from "./routes/index.js";
 
 const app = express();
 
+app.use(bodyParser.json());
 app.use(index);
 
-app.listen(3000, () => {
-  console.log("Server listening on port 3000");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log("Servidor escuchando en el puerto ${PORT}");
 });
