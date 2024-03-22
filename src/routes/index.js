@@ -42,8 +42,9 @@ router.get("/invoice", (req, res) => {
   }
   const stream = res.writeHead(200, {
     "Content-Type": "application/pdf",
-    "Content-Disposition": "attachment; filename=invoice.pdf",
+    "Content-Disposition": "inline; filename=invoice.pdf",
   });
+  //    "Content-Disposition": "attachment; filename=invoice.pdf",
 
   buildPDF(
     user,
