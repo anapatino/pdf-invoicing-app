@@ -91,7 +91,7 @@ function addPaymentMethods(doc, methodOfPayment, servicesLength) {
       .fillColor("black")
       .fontSize(12)
       .text(method + ":", currentX + 70, textY);
-    if (method !== "Bancolombia") {
+    if (method !== "bancolombia") {
       doc
         .fillColor("black")
         .fontSize(10)
@@ -99,7 +99,7 @@ function addPaymentMethods(doc, methodOfPayment, servicesLength) {
     }
 
     if (
-      method === "Bancolombia" &&
+      method === "bancolombia" &&
       typeof methodOfPayment.bancolombia === "object"
     ) {
       const bancolombiaData = methodOfPayment.bancolombia;
