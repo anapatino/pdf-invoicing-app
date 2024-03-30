@@ -30,13 +30,21 @@ function addMaterialTable(doc, materials) {
       .text(material.name, 80, 230 + 30 * index, { align: "left" });
     doc
       .fontSize(12)
-      .text(material.quantity, 250, 230 + 30 * index, { align: "left" });
-    if (material.discount != null) {
-      doc.fontSize(12).text(material.discount + "%", 370, 230 + 30 * index, {
-        align: "left",
-      });
+      .text(material.quantity, 270, 230 + 30 * index, { align: "left" });
+
+    let discountAmount = 0;
+    if (material.discount != null && material.discount !== "") {
+      const discount = parseFloat(material.discount);
+      discountAmount = discount * (material.salePrice * material.quantity);
+      doc
+        .fontSize(12)
+        .text(material.discount * 100 + "%", 390, 230 + 30 * index, {
+          align: "left",
+        });
     }
-    const materialTotal = material.salePrice * material.quantity;
+
+    const materialTotal =
+      material.salePrice * material.quantity - discountAmount;
     subtotal += materialTotal;
     doc.fontSize(12).text(Math.round(materialTotal), 480, 230 + 30 * index, {
       align: "left",
@@ -45,7 +53,6 @@ function addMaterialTable(doc, materials) {
 
   return subtotal;
 }
-
 function addServiceTable(doc, services, startIndex) {
   let subtotal = 0;
   services.forEach((service, index) => {
@@ -116,7 +123,7 @@ function addPaymentMethods(doc, methodOfPayment, servicesLength) {
 }
 
 function addSummary(doc, subtotal, servicesLength, methodOfPayment) {
-  const iva = subtotal * 0.15;
+  const iva = subtotal * 0.19;
   const total = subtotal + iva;
 
   doc.fontSize(12).text("Subtotal", 340, 220 + 30 * (servicesLength + 1) + 20);
