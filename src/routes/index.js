@@ -4,20 +4,16 @@ import { buildPDF } from "../lib/invoice_pdf.js";
 const router = Router();
 
 router.post("/invoice", (req, res) => {
-  const user = {
-    name: req.body.name || "Cliente no especificado",
-    address: req.body.address || "Dirección no especificada",
-    phone: req.body.phone || "Teléfono no especificado",
-  };
 
   const quotationData = req.body.quotation || {};
   const methodOfPaymentData = req.body.methodOfPayment || {};
 
   const quotation = {
     id: quotationData.id || "",
-    name: quotationData.name || "",
-    description: quotationData.description || "",
-    idService: quotationData.idService || [],
+    name: quotationData.name || "Cliente no especificado",
+    address: quotationData.address || "Dirección no especificada",
+    phone: quotationData.phone || "Teléfono no especificado",
+    customizedServices: quotationData.customizedServices || [],
     materials: quotationData.materials || [],
     length: quotationData.length || "",
     status: quotationData.status || "",
@@ -47,7 +43,6 @@ router.post("/invoice", (req, res) => {
   });
 
   buildPDF(
-    user,
     quotation,
     methodOfPayment,
     (data) => stream.write(data),
