@@ -46,10 +46,10 @@ function addMaterialTable(doc, materials) {
       .text(material.quantity, 183, 230 + 30 * index, { align: "left" });
     doc
       .fontSize(10)
-      .text(material.purchasePrice, 230, 230 + 30 * index, { align: "left" });
+      .text(material.salePrice, 230, 230 + 30 * index, { align: "left" });
     let subTotalMaterial = 0;
-    if (material.purchasePrice != null && material.quantity !== "") {
-      subTotalMaterial = material.purchasePrice * material.quantity;
+    if (material.salePrice != null && material.quantity !== "") {
+      subTotalMaterial = material.salePrice * material.quantity;
       doc.fontSize(10).text(subTotalMaterial, 300, 230 + 30 * index, {
         align: "left",
       });
@@ -82,7 +82,8 @@ function addServiceTable(doc, customizedServices, startIndex) {
       width: 130,
       align: "left",
     });
-    doc
+    if (service.measures.height != "0" && service.measures.width != "0"){
+      doc
       .fontSize(10)
       .text(
         service.measures.height * service.measures.width + "m²",
@@ -90,6 +91,8 @@ function addServiceTable(doc, customizedServices, startIndex) {
         230 + 30 * (startIndex + index),
         { align: "left" }
       );
+    }
+  
     doc.fontSize(10).text(service.price, 425, 230 + 30 * (startIndex + index), {
       align: "left",
     });
